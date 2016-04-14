@@ -58,7 +58,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 			curReq := requestList[curIndex]
 			fmt.Printf("Pinging %s\n", curReq.IPAddressHostname)
 
-			timeout := time.Duration(config.IndividualTimout) * time.Second
+			timeout := time.Duration(config.IndividualTimeout) * time.Second
 
 			_, err := net.DialTimeout("tcp", curReq.IPAddressHostname+":"+strconv.Itoa(curReq.Port), timeout)
 

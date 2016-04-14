@@ -14,7 +14,7 @@ type request struct {
 }
 
 type configuration struct {
-	WaitThreshold    int //How many items to have in our list before we stop waiting between iterations
-	IterativeTime    int //How long to wait between iterations if the threshold isn't met.
-	IndividualTimout int //time in seconds to wait before timing out indivi
+	WaitThreshold     int //How many items to have in our list before we stop waiting between iterations
+	IterativeTime     int //How long to wait between iterations if the threshold isn't met.
+	IndividualTimeout int //time in seconds to wait before timing out indivi
 }
