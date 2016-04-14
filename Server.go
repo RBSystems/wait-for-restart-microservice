@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -37,12 +38,38 @@ func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.Res
 	}
 }
 
+func importConfig(configPath string) configuration {
+	fmt.Printf("Importing the configuration information from %v\n", configPath)
+
+	f, err := ioutil.ReadFile(configPath)
+	check(err)
+
+	var configurationData configuration
+	json.Unmarshal(f, &configurationData)
+
+	fmt.Printf("\n%s\n", f)
+
+	return configurationData
+}
+
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
+	var ConfigFileLocation = flag.String("config", "./config.json", "The locaton of the config file.")
+
+	flag.Parse()
+
+	config := importConfig(*ConfigFileLocation)
+
 	submissionChannel := make(chan request, 50)
 
 	submitRequest := makeSubmissonHandler(submissionChannel)
 
-	go runService(submissionChannel, configuration{WaitThreshold: 5, IterativeTime: 5, IndividualTimout: 1})
+	go runService(submissionChannel, config)
 
 	goji.Post("/submit", submitRequest)
 	goji.Post("/submit/", submitRequest)

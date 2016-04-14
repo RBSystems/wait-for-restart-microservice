@@ -1,0 +1,5 @@
+{
+  "WaitThreshold": 10,
+  "IterativeTime": 3,
+  "IndividualTimout": 1 
+}
