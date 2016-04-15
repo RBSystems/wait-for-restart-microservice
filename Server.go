@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -10,6 +11,13 @@ import (
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
 )
+
+func checkReq(req request) error {
+	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.IPAddressHostname) < 1 {
+		return errors.New("Invalid Payload.")
+	}
+	return nil
+}
 
 //If we want the hanlder to have access to the channel we have to build a wrapper around it.
 func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.ResponseWriter, *http.Request) {
@@ -32,6 +40,20 @@ func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.Res
 			fmt.Fprintf(w, "Error with the request body: %s", err.Error())
 			return
 		}
+		err = checkReq(req)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprintf(w, `Invalid request. Request must be in form of:
+			  "IPAddressHostname": "string",
+				"Port": int,
+				"Timeout": int,
+				"CallbackAddress": "string",
+				"Identifier": "Optional string"
+			}`)
+			return
+		}
+
 		submissionChannel <- req //add the request body to the channel queue
 
 		fmt.Fprintf(w, "Added to queue.")
