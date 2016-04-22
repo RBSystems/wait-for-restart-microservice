@@ -38,31 +38,28 @@ func runService(submissionChannel <-chan request, config configuration) {
 		if len(requestList) < 1 {
 			fmt.Printf("Waiting for entry into the channel.\n")
 			req := <-submissionChannel
-			fmt.Printf("Adding the item to the channel: %s\n", req.IPAddressHostname)
+			fmt.Printf("%s Adding the item to the channel: \n", req.IPAddressHostname)
 			req.SubmissionTime = time.Now()
-			if req.Timeout == 0 {
-				req.Timeout = 600
-			}
 			requestList = append(requestList, req)
-		} else {
-			select {
-			case req := <-submissionChannel: //if there's something in the channel get it
-				fmt.Printf("Adding item to channel %s.\n", req.IPAddressHostname)
-				req.SubmissionTime = time.Now()
-				requestList = append(requestList, req)
-				if req.Timeout == 0 {
-					req.Timeout = 600
-				}
-
-			default: //otherwise just bypass
-			}
+			continue //go back to get everything out of the channel that's there
+		}
+		select {
+		case req := <-submissionChannel: //if there's something in the channel get it
+			fmt.Printf("%s Adding item to channel.\n", req.IPAddressHostname)
+			req.SubmissionTime = time.Now()
+			requestList = append(requestList, req)
+			continue //go back to get everything out of the channel that's there
+		default: //otherwise just bypass
 		}
 
-		for curIndex := range requestList {
+		//we have to use a descending list otherwise our deletion gets in the way.
+		for curIndex := len(requestList) - 1; curIndex >= 0; curIndex-- {
 			curReq := requestList[curIndex]
-			fmt.Printf("Pinging %s\n", curReq.IPAddressHostname)
+			fmt.Printf("%s Pinging \n", curReq.IPAddressHostname)
 
-			timeout := time.Duration(config.IndividualTimeout) * time.Second
+			timeout := 1 * time.Second
+
+			//fmt.Printf("Timeout: %v", timeout)
 
 			conn, err := net.DialTimeout("tcp", curReq.IPAddressHostname+":"+strconv.Itoa(curReq.Port), timeout)
 
@@ -71,29 +68,32 @@ func runService(submissionChannel <-chan request, config configuration) {
 
 				if !systemIsBusy(curReq) {
 					sendResponse(curReq, "Success")
-					fmt.Printf("Success!\n")
+					fmt.Printf("%s Success!\n", curReq.IPAddressHostname)
 					requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
 					continue
 				}
 			}
 
-			fmt.Printf("No response.\n")
+			fmt.Printf("%s No response.\n", curReq.IPAddressHostname)
 			//we didn't connect, check the timeout.
-			fmt.Printf("Time since init: %v\n", time.Since(curReq.SubmissionTime).Seconds())
+			fmt.Printf("%s Time since init: %v\n", curReq.IPAddressHostname, time.Since(curReq.SubmissionTime).Seconds())
 			if int(time.Since(curReq.SubmissionTime).Seconds()) > curReq.Timeout { //We've timed out
+
 				sendResponse(curReq, "Timeout")
-				fmt.Printf("Failure, timeout.")
+				fmt.Printf("%s Failure, timeout %s.\n", curReq.IPAddressHostname, curReq.Timeout)
+
 				requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
 				continue
 			}
-
 		}
-		if len(requestList) == 0 {
+
+		if len(requestList) == 0 { //get back to wait for another request
 			continue
 		} else if len(requestList) < config.WaitThreshold {
 			time.Sleep(time.Duration(config.IterativeTime) * time.Second)
 		}
 	}
+
 }
 
 //Check to make sure we're not getting a 'system is busy' error.

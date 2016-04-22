@@ -53,7 +53,9 @@ func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.Res
 			}`)
 			return
 		}
-
+		if req.Timeout <= 10 {
+			req.Timeout = 500
+		}
 		submissionChannel <- req //add the request body to the channel queue
 
 		fmt.Fprintf(w, "Added to queue.")
