@@ -7,7 +7,10 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
+
+	"github.com/ziutek/telnet"
 )
 
 func sendResponse(req request, status string) {
@@ -60,14 +63,19 @@ func runService(submissionChannel <-chan request, config configuration) {
 
 			timeout := time.Duration(config.IndividualTimeout) * time.Second
 
-			_, err := net.DialTimeout("tcp", curReq.IPAddressHostname+":"+strconv.Itoa(curReq.Port), timeout)
+			conn, err := net.DialTimeout("tcp", curReq.IPAddressHostname+":"+strconv.Itoa(curReq.Port), timeout)
 
 			if err == nil { //successfully connected
-				sendResponse(curReq, "Success")
-				fmt.Printf("Success!\n")
-				requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
-				continue
+				defer conn.Close()
+
+				if !systemIsBusy(curReq) {
+					sendResponse(curReq, "Success")
+					fmt.Printf("Success!\n")
+					requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
+					continue
+				}
 			}
+
 			fmt.Printf("No response.\n")
 			//we didn't connect, check the timeout.
 			fmt.Printf("Time since init: %v\n", time.Since(curReq.SubmissionTime).Seconds())
@@ -85,4 +93,49 @@ func runService(submissionChannel <-chan request, config configuration) {
 			time.Sleep(time.Duration(config.IterativeTime) * time.Second)
 		}
 	}
+}
+
+//Check to make sure we're not getting a 'system is busy' error.
+
+//We thought about using the telnet microservice to check if we get a 'system is busy'
+//response, but that could wait for too long and chew up our process.
+//TODO: make this not just work for TSW 750
+func systemIsBusy(curReq request) bool {
+	var conn *telnet.Conn
+
+	conn, err := telnet.Dial("tcp", curReq.IPAddressHostname+":41795")
+
+	conn.SetUnixWriteMode(true) // Convert any '\n' (LF) to '\r\n' (CR LF) This is apparently very important
+	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+
+	if err != nil {
+		return true
+	}
+
+	_, err = conn.Write([]byte("hostname\n\n")) // Send a second newline so we get the prompt
+
+	if err != nil {
+		return true
+	}
+
+	err = conn.SkipUntil("TSW-750>")
+
+	if err != nil {
+		return true
+	}
+
+	response, err := conn.ReadUntil("TSW-750>") // Read until the second prompt delimiter (provided by sending two commands in sendCommand)
+
+	if err != nil {
+		return true
+	}
+
+	conn.Close()
+	fmt.Printf("%s\n", string(response))
+
+	if strings.Contains(string(response), "system is busy") {
+		return true
+	}
+
+	return false
 }
