@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -99,7 +100,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 
 //We thought about using the telnet microservice to check if we get a 'system is busy'
 //response, but that could wait for too long and chew up our process.
-//TODO: make this not just work for TSW 750
+//TODO: make this not just work for folks that will respond to telnet over port 41795
 func systemIsBusy(curReq request) bool {
 	var conn *telnet.Conn
 
@@ -108,9 +109,24 @@ func systemIsBusy(curReq request) bool {
 	conn.SetUnixWriteMode(true) // Convert any '\n' (LF) to '\r\n' (CR LF) This is apparently very important
 	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
 
+	_, err = conn.Write([]byte("\n\n"))
+
 	if err != nil {
 		return true
 	}
+
+	//Dynamically get the prompt
+	conn.SkipUntil(">")
+	promptBytes, err := conn.ReadUntil(">")
+
+	if err != nil {
+		return true
+	}
+	regex := "\\S.*?>"
+
+	re := regexp.MustCompile(regex)
+
+	prompt := string(re.Find(promptBytes))
 
 	_, err = conn.Write([]byte("hostname\n\n")) // Send a second newline so we get the prompt
 
@@ -118,13 +134,13 @@ func systemIsBusy(curReq request) bool {
 		return true
 	}
 
-	err = conn.SkipUntil("TSW-750>")
+	err = conn.SkipUntil(prompt)
 
 	if err != nil {
 		return true
 	}
 
-	response, err := conn.ReadUntil("TSW-750>") // Read until the second prompt delimiter (provided by sending two commands in sendCommand)
+	response, err := conn.ReadUntil(prompt) // Read until the second prompt delimiter (provided by sending two commands in sendCommand)
 
 	if err != nil {
 		return true
