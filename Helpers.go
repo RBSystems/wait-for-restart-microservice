@@ -106,6 +106,10 @@ func systemIsBusy(curReq request) bool {
 
 	conn, err := telnet.Dial("tcp", curReq.IPAddressHostname+":41795")
 
+	if err != nil {
+		return true
+	}
+
 	conn.SetUnixWriteMode(true) // Convert any '\n' (LF) to '\r\n' (CR LF) This is apparently very important
 	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
 
