@@ -57,7 +57,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 			curReq := requestList[curIndex]
 			fmt.Printf("%s Pinging \n", curReq.IPAddressHostname)
 
-			timeout := 1 * time.Second
+			timeout := 85 * time.Millisecond
 
 			//fmt.Printf("Timeout: %v", timeout)
 
