@@ -16,6 +16,7 @@ func checkReq(req request) error {
 	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.IPAddressHostname) < 1 {
 		return errors.New("Invalid Payload.")
 	}
+
 	return nil
 }
 
@@ -53,9 +54,11 @@ func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.Res
 			}`)
 			return
 		}
+
 		if req.Timeout <= 10 {
 			req.Timeout = 500
 		}
+
 		submissionChannel <- req //add the request body to the channel queue
 
 		fmt.Fprintf(w, "Added to queue.")

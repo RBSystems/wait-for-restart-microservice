@@ -57,7 +57,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 			curReq := requestList[curIndex]
 			fmt.Printf("%s Pinging \n", curReq.IPAddressHostname)
 
-			timeout := 20 * time.Millisecond
+			timeout := time.Duration(config.IndividualTimeout) * time.Millisecond
 
 			//fmt.Printf("Timeout: %v", timeout)
 
@@ -80,7 +80,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 			if int(time.Since(curReq.SubmissionTime).Seconds()) > curReq.Timeout { //We've timed out
 
 				sendResponse(curReq, "Timeout")
-				fmt.Printf("%s Failure, timeout %s.\n", curReq.IPAddressHostname, curReq.Timeout)
+				fmt.Printf("%s Failure, timeout %v.\n", curReq.IPAddressHostname, curReq.Timeout)
 
 				requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
 				continue
@@ -101,7 +101,7 @@ func runService(submissionChannel <-chan request, config configuration) {
 //We thought about using the telnet microservice to check if we get a 'system is busy'
 //response, but that could wait for too long and chew up our process.
 //TODO: make this not just work for folks that will respond to telnet over port 41795
-func systemIsBusy(curReq request) bool {
+func systemIsBusy(curReq request) bool { // Checks if system is busy (true = system is busy)
 	var conn *telnet.Conn
 
 	conn, err := telnet.Dial("tcp", curReq.IPAddressHostname+":41795")

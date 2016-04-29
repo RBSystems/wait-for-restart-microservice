@@ -8,7 +8,7 @@ The information for the pinging information can be found in the Config file, det
 
 ## Endpoints
 
-`POST   /submit`
+`POST /submit`
 
 Submission happens here, the expected JSON payload should be in the form of
 
@@ -59,4 +59,4 @@ The config file should be in the form of
 
 * WaitThreshold is the number of devices being monitored required before no wait is imposed between iterations.
 * IterativeTime is the number of seconds to wait between iterations, assuming that the WaitThreshold has not been reached.
-* IndividualTimeout is the number of seconds to wait for each individual connection (TCP attempt) before timing out.
+* IndividualTimeout is the number of milliseconds to wait for each individual connection (TCP attempt) before timing out.
