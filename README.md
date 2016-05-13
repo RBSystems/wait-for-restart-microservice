@@ -32,14 +32,14 @@ When the the device has either successfully responded or the timeout has elapsed
 
 ```
 {
-    "IPAddressHostname": "The value passed in.",
-    "Port": the value passed in,
-    "Timeout": the value passed in,
-    "CallbackAddress": "The value passed in.",
-    "SubmissionTime": "The time, in RFC3339 format, the address was submitted for observation.",
-    "CompletionTime": "The time, in RFC3339 format, the device responded or timeout was reached.",
-    "Status": "Success if the device responded. Timeout if timed out.",
-    "Identifier": "The value passed in."
+  "IPAddressHostname": "The value passed in.",
+  "Port": the value passed in,
+  "Timeout": the value passed in,
+  "CallbackAddress": "The value passed in.",
+  "SubmissionTime": "The time, in RFC3339 format, the address was submitted for observation.",
+  "CompletionTime": "The time, in RFC3339 format, the device responded or timeout was reached.",
+  "Status": "Success if the device responded. Timeout if timed out.",
+  "Identifier": "The value passed in."
 {
 ```
 

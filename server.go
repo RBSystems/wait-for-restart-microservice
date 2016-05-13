@@ -8,70 +8,57 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/zenazn/goji"
-	"github.com/zenazn/goji/web"
+	"github.com/byuoitav/hateoas"
+	"github.com/byuoitav/listen-for-reboot-microservice/controllers"
+	"github.com/byuoitav/listen-for-reboot-microservice/helpers"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/fasthttp"
+	"github.com/labstack/echo/middleware"
 )
 
-func checkReq(req request) error {
+func checkRequest(req helpers.Request) error {
 	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.IPAddressHostname) < 1 {
-		return errors.New("Invalid Payload.")
+		return errors.New("Invalid payload")
 	}
 
 	return nil
 }
 
-//If we want the hanlder to have access to the channel we have to build a wrapper around it.
-func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.ResponseWriter, *http.Request) {
-	//This is our actual handler - submitRequest
-	return func(c web.C, w http.ResponseWriter, r *http.Request) {
-		bits, err := ioutil.ReadAll(r.Body)
+// If we want the handler to have access to the channel we have to build a wrapper around it.
+func makeSubmissonHandler(submissionChannel chan<- helpers.Request) func(c echo.Context) error {
+	// This is our actual handler - submitRequest
+	return func(c echo.Context) error {
+		request := helpers.Request{}
+		c.Bind(request)
 
+		err := checkRequest(request)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "Could not read request body: %s\n", err.Error())
-			return
-		}
-
-		var req request
-
-		err = json.Unmarshal(bits, &req)
-
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "Error with the request body: %s", err.Error())
-			return
-		}
-		err = checkReq(req)
-
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, `Invalid request. Request must be in form of:
+			return c.String(http.StatusBadRequest, `Invalid request. Request must be in form of:
 			  "IPAddressHostname": "string",
 				"Port": int,
 				"Timeout": int,
 				"CallbackAddress": "string",
 				"Identifier": "Optional string"
 			}`)
-			return
 		}
 
-		if req.Timeout <= 10 {
-			req.Timeout = 500
+		if request.Timeout <= 10 {
+			request.Timeout = 500
 		}
 
-		submissionChannel <- req //add the request body to the channel queue
+		submissionChannel <- request // Add the request body to the channel queue
 
-		fmt.Fprintf(w, "Added to queue.")
+		return c.String(http.StatusOK, "Added to queue")
 	}
 }
 
-func importConfig(configPath string) configuration {
-	fmt.Printf("Importing the configuration information from %v\n", configPath)
+func importConfig(configPath string) helpers.Configuration {
+	fmt.Printf("Importing configuration information from %v\n", configPath)
 
 	f, err := ioutil.ReadFile(configPath)
 	check(err)
 
-	var configurationData configuration
+	var configurationData helpers.Configuration
 	json.Unmarshal(f, &configurationData)
 
 	fmt.Printf("\n%s\n", f)
@@ -86,20 +73,33 @@ func check(err error) {
 }
 
 func main() {
-	var ConfigFileLocation = flag.String("config", "./config.json", "The locaton of the config file.")
+	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/listen-for-reboot-microservice/master/swagger.yml")
+	if err != nil {
+		fmt.Println("Could not load Swagger file")
+		panic(err)
+	}
+
+	var configFile = flag.String("config", "./config.json", "The locaton of the config file")
 
 	flag.Parse()
 
-	config := importConfig(*ConfigFileLocation)
+	config := importConfig(*configFile)
 
-	submissionChannel := make(chan request, 50)
+	submissionChannel := make(chan helpers.Request, 50)
 
 	submitRequest := makeSubmissonHandler(submissionChannel)
 
-	go runService(submissionChannel, config)
+	go helpers.RunService(submissionChannel, config)
 
-	goji.Post("/submit", submitRequest)
-	goji.Post("/submit/", submitRequest)
-	//TODO: add some way to check the status (to make sure it hasn't gotten lost).
-	goji.Serve()
+	port := ":8003"
+	e := echo.New()
+	e.Pre(middleware.RemoveTrailingSlash())
+
+	e.Get("/", controllers.Root)
+	e.Get("/health", controllers.Health)
+
+	e.Post("/submit", submitRequest)
+
+	fmt.Printf("Listen for Reboot microservice is listening on %s\n", port)
+	e.Run(fasthttp.New(port))
 }
