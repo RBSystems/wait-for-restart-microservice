@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/byuoitav/hateoas"
-	"github.com/byuoitav/listen-for-reboot-microservice/controllers"
-	"github.com/byuoitav/listen-for-reboot-microservice/helpers"
+	"github.com/byuoitav/wait-for-reboot-microservice/controllers"
+	"github.com/byuoitav/wait-for-reboot-microservice/helpers"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/fasthttp"
@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/listen-for-reboot-microservice/master/swagger.yml")
+	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.yml")
 	if err != nil {
 		fmt.Println("Could not load Swagger file")
 		panic(err)

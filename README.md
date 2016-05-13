@@ -1,6 +1,6 @@
-# Listen for Reboot Microservice
+# Wait for Reboot Microservice
 
-[![View in Swagger](http://www.jessemillar.com/view-in-swagger-button/button.svg)](https://byuoitav.github.io/listen-for-reboot-microservice/)
+[![View in Swagger](http://www.jessemillar.com/view-in-swagger-button/button.svg)](https://byuoitav.github.io/wait-for-reboot-microservice/)
 
 A service designed to monitor the restart status of devices (by testing a TCP connection) and notify the submitter when they are complete. Designed specifically for Crestron devices.
 
