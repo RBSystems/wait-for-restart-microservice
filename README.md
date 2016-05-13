@@ -1,5 +1,7 @@
 # Listen for Reboot Microservice
 
+[![View in Swagger](http://www.jessemillar.com/view-in-swagger-button/button.svg)](https://byuoitav.github.io/listen-for-reboot-microservice/)
+
 A service designed to monitor the restart status of devices (by testing a TCP connection) and notify the submitter when they are complete. Designed specifically for Crestron devices.
 
 The service monitors multiple targets concurrently, and will notify the address defined in the submission request when they respond successfully to TCP requests.
@@ -14,7 +16,7 @@ Submission happens here, the expected JSON payload should be in the form of
 
 ```
 {
-  "IPAddressHostname": "string",
+  "MachineAddress": "string",
 	"Port": int,
 	"Timeout": int,
 	"CallbackAddress": "string",
@@ -22,7 +24,7 @@ Submission happens here, the expected JSON payload should be in the form of
 }
 ```
 
-* IPAddressHostname is the address of the machine you wish to listen for.
+* MachineAddress is the address of the machine you wish to listen for.
 * Port is the port to try connections over
 * Timeout how long you want to try for in seconds - will default to 300 if no value given
 * Callback Address the address the service will send a POST request to to notify of either connection or timeout.
@@ -32,7 +34,7 @@ When the the device has either successfully responded or the timeout has elapsed
 
 ```
 {
-  "IPAddressHostname": "The value passed in.",
+  "MachineAddress": "The value passed in.",
   "Port": the value passed in,
   "Timeout": the value passed in,
   "CallbackAddress": "The value passed in.",

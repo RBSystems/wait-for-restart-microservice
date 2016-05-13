@@ -12,7 +12,7 @@ import (
 func IsSystemBusy(curReq Request) bool {
 	var conn *telnet.Conn
 
-	conn, err := telnet.Dial("tcp", curReq.IPAddressHostname+":23")
+	conn, err := telnet.Dial("tcp", curReq.MachineAddress+":23")
 	if err != nil {
 		return true
 	}

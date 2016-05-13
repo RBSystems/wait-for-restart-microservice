@@ -11,13 +11,14 @@ import (
 	"github.com/byuoitav/hateoas"
 	"github.com/byuoitav/listen-for-reboot-microservice/controllers"
 	"github.com/byuoitav/listen-for-reboot-microservice/helpers"
+	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
 )
 
 func checkRequest(req helpers.Request) error {
-	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.IPAddressHostname) < 1 {
+	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.MachineAddress) < 1 {
 		return errors.New("Invalid payload")
 	}
 
@@ -33,13 +34,7 @@ func makeSubmissonHandler(submissionChannel chan<- helpers.Request) func(c echo.
 
 		err := checkRequest(request)
 		if err != nil {
-			return c.String(http.StatusBadRequest, `Invalid request. Request must be in form of:
-			  "IPAddressHostname": "string",
-				"Port": int,
-				"Timeout": int,
-				"CallbackAddress": "string",
-				"Identifier": "Optional string"
-			}`)
+			return c.JSON(http.StatusBadRequest, "Request must include at least MachineAddress and CallbackAddress tokens")
 		}
 
 		if request.Timeout <= 10 {
@@ -48,20 +43,16 @@ func makeSubmissonHandler(submissionChannel chan<- helpers.Request) func(c echo.
 
 		submissionChannel <- request // Add the request body to the channel queue
 
-		return c.String(http.StatusOK, "Added to queue")
+		return c.JSON(http.StatusOK, "Added to queue")
 	}
 }
 
 func importConfig(configPath string) helpers.Configuration {
-	fmt.Printf("Importing configuration information from %v\n", configPath)
-
 	f, err := ioutil.ReadFile(configPath)
 	check(err)
 
 	var configurationData helpers.Configuration
 	json.Unmarshal(f, &configurationData)
-
-	fmt.Printf("\n%s\n", f)
 
 	return configurationData
 }
@@ -96,7 +87,7 @@ func main() {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Get("/", controllers.Root)
-	e.Get("/health", controllers.Health)
+	e.Get("/health", health.Check)
 	e.Get("/submit", controllers.SubmitInfo)
 
 	e.Post("/submit", submitRequest)
