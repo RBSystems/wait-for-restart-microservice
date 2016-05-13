@@ -97,6 +97,7 @@ func main() {
 
 	e.Get("/", controllers.Root)
 	e.Get("/health", controllers.Health)
+	e.Get("/submit", controllers.SubmitInfo)
 
 	e.Post("/submit", submitRequest)
 
