@@ -46,6 +46,6 @@ func main() {
 
 	e.Post("/submit", submitRequest)
 
-	fmt.Printf("Wait for Reboot microservice is listening on %s\n", port)
+	fmt.Printf("The Wait for Reboot microservice is listening on %s\n", port)
 	e.Run(fasthttp.New(port))
 }

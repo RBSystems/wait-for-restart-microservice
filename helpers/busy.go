@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 	"time"
@@ -54,7 +53,6 @@ func IsSystemBusy(curReq Request) bool {
 	}
 
 	conn.Close()
-	fmt.Printf("%s\n", string(response))
 
 	if strings.Contains(string(response), "system is busy") {
 		return true

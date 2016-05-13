@@ -10,10 +10,9 @@ func MakeSubmissonHandler(submissionChannel chan<- Request) func(c echo.Context)
 	// If we want the handler to have access to the channel we have to build a wrapper around it
 	return func(c echo.Context) error {
 		request := Request{}
-		c.Bind(request)
+		c.Bind(&request)
 
-		err := CheckRequest(request)
-		if err != nil {
+		if len(request.CallbackAddress) < 1 || len(request.MachineAddress) < 1 {
 			return c.JSON(http.StatusBadRequest, "Request must include at least MachineAddress and CallbackAddress tokens")
 		}
 

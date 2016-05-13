@@ -113,7 +113,6 @@ definitions:
       Port:
         type: integer
         description: The port of the machine to be used for connection
-
       CallbackAddress:
         type: string
         description: The address to POST to upon reboot
