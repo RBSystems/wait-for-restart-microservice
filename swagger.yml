@@ -37,7 +37,7 @@ paths:
     get:
       summary: Get Submit Information
       description: |
-        Returns information about the /submit enpoint.
+        Returns information about the /submit endpoint.
       tags:
         - Wait
       responses:
