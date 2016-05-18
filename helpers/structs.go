@@ -9,12 +9,12 @@ type Configuration struct {
 }
 
 type Request struct {
-	MachineAddress  string    // Address to be tested for reboot
-	Port            int       // The port to be used when testing connection
-	Timeout         int       // Time in seconds to wait
-	CallbackAddress string    // Complete address to send the notification that the host is responding
-	SubmissionTime  time.Time // Will be filled by the service to indicate when the process started pinging
-	CompletionTime  time.Time // Will be filled by the service to indicate when the machine responded or timed out
-	Status          string    // Timeout or Success
-	Identifier      string    // Optional value so the requester can identify the host when it's sent back
+	MachineAddress  string    `json:"machineAddress"`  // Address to be tested for reboot
+	Port            int       `json:"port"`            // The port to be used when testing connection
+	Timeout         int       `json:"timeout"`         // Time in seconds to wait
+	CallbackAddress string    `json:"callbackAddress"` // Complete address to send the notification that the host is responding
+	SubmissionTime  time.Time `json:"submissionTime"`  // Will be filled by the service to indicate when the process started pinging
+	CompletionTime  time.Time `json:"completionTime"`  // Will be filled by the service to indicate when the machine responded or timed out
+	Status          string    `json:"status"`          // Timeout or Success
+	Identifier      string    `json:"identifier"`      // Optional value so the requester can identify the host when it's sent back
 }
