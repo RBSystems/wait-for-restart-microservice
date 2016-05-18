@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  title: Listen for Reboot Microservice
+  title: Wait for Reboot Microservice
   description: Waits for Crestron machines to reboot and reports back when they do
   version: "0.1"
 # host: api.byu.edu
@@ -37,9 +37,9 @@ paths:
     get:
       summary: Get Submit Information
       description: |
-        Returns information about the /submit enpoint.
+        Returns information about the /submit endpoint.
       tags:
-        - Listen
+        - Wait
       responses:
         200:
           description: Endpoint information
@@ -56,7 +56,7 @@ paths:
         default:
           $ref: "#/responses/default"
     post:
-      summary: Submit for Listen
+      summary: Submit for Wait
       description: |
         Submit a machine to the listen microservice.
       parameters:
@@ -67,7 +67,7 @@ paths:
           schema:
             $ref: "#/definitions/file-request"
       tags:
-        - Listen
+        - Wait
       responses:
         201:
           description: All went well
@@ -113,7 +113,6 @@ definitions:
       Port:
         type: integer
         description: The port of the machine to be used for connection
-
       CallbackAddress:
         type: string
         description: The address to POST to upon reboot

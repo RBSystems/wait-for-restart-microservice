@@ -1,105 +1,51 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
-	"github.com/zenazn/goji"
-	"github.com/zenazn/goji/web"
+	"github.com/byuoitav/hateoas"
+	"github.com/byuoitav/wait-for-reboot-microservice/controllers"
+	"github.com/byuoitav/wait-for-reboot-microservice/helpers"
+	"github.com/jessemillar/health"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/fasthttp"
+	"github.com/labstack/echo/middleware"
 )
 
-func checkReq(req request) error {
-	if len(req.CallbackAddress) < 1 || req.Port == 0 || len(req.IPAddressHostname) < 1 {
-		return errors.New("Invalid Payload.")
-	}
-
-	return nil
-}
-
-//If we want the hanlder to have access to the channel we have to build a wrapper around it.
-func makeSubmissonHandler(submissionChannel chan<- request) func(web.C, http.ResponseWriter, *http.Request) {
-	//This is our actual handler - submitRequest
-	return func(c web.C, w http.ResponseWriter, r *http.Request) {
-		bits, err := ioutil.ReadAll(r.Body)
-
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "Could not read request body: %s\n", err.Error())
-			return
-		}
-
-		var req request
-
-		err = json.Unmarshal(bits, &req)
-
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "Error with the request body: %s", err.Error())
-			return
-		}
-		err = checkReq(req)
-
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, `Invalid request. Request must be in form of:
-			  "IPAddressHostname": "string",
-				"Port": int,
-				"Timeout": int,
-				"CallbackAddress": "string",
-				"Identifier": "Optional string"
-			}`)
-			return
-		}
-
-		if req.Timeout <= 10 {
-			req.Timeout = 500
-		}
-
-		submissionChannel <- req //add the request body to the channel queue
-
-		fmt.Fprintf(w, "Added to queue.")
-	}
-}
-
-func importConfig(configPath string) configuration {
-	fmt.Printf("Importing the configuration information from %v\n", configPath)
-
-	f, err := ioutil.ReadFile(configPath)
-	check(err)
-
-	var configurationData configuration
-	json.Unmarshal(f, &configurationData)
-
-	fmt.Printf("\n%s\n", f)
-
-	return configurationData
-}
-
-func check(err error) {
+func main() {
+	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.yml")
 	if err != nil {
+		fmt.Println("Could not load Swagger file")
 		panic(err)
 	}
-}
 
-func main() {
-	var ConfigFileLocation = flag.String("config", "./config.json", "The locaton of the config file.")
+	var configFile = flag.String("config", "./config.json", "The location of the config file")
 
 	flag.Parse()
 
-	config := importConfig(*ConfigFileLocation)
+	config, err := helpers.ImportConfig(*configFile)
+	if err != nil {
+		fmt.Println("Could not load config file")
+		panic(err)
+	}
 
-	submissionChannel := make(chan request, 50)
+	submissionChannel := make(chan helpers.Request, 50)
 
-	submitRequest := makeSubmissonHandler(submissionChannel)
+	submitRequest := helpers.MakeSubmissonHandler(submissionChannel)
 
-	go runService(submissionChannel, config)
+	go helpers.RunService(submissionChannel, config)
 
-	goji.Post("/submit", submitRequest)
-	goji.Post("/submit/", submitRequest)
-	//TODO: add some way to check the status (to make sure it hasn't gotten lost).
-	goji.Serve()
+	port := ":8003"
+	e := echo.New()
+	e.Pre(middleware.RemoveTrailingSlash())
+
+	e.Get("/", controllers.Root)
+	e.Get("/health", health.Check)
+	e.Get("/submit", controllers.SubmitInfo)
+
+	e.Post("/submit", submitRequest)
+
+	fmt.Printf("The Wait for Reboot microservice is listening on %s\n", port)
+	e.Run(fasthttp.New(port))
 }
