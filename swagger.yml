@@ -104,10 +104,10 @@ definitions:
   file-request:
     type: object
     required:
-      - "MachineAddress"
+      - "Address"
       - "CallbackAddress"
     properties:
-      MachineAddress:
+      Address:
         type: string
         description: The address of the machine to be monitored for reboot
       Port:

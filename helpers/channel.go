@@ -12,8 +12,8 @@ func MakeSubmissonHandler(submissionChannel chan<- Request) func(c echo.Context)
 		request := Request{}
 		c.Bind(&request)
 
-		if len(request.CallbackAddress) < 1 || len(request.MachineAddress) < 1 {
-			return c.JSON(http.StatusBadRequest, "Request must include at least MachineAddress and CallbackAddress tokens")
+		if len(request.CallbackAddress) < 1 || len(request.Address) < 1 {
+			return c.JSON(http.StatusBadRequest, "Request must include at least Address and CallbackAddress tokens")
 		}
 
 		if request.Port == 0 {

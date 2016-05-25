@@ -8,10 +8,10 @@ import (
 	"github.com/ziutek/telnet"
 )
 
-func IsSystemBusy(curReq Request) bool {
+func IsSystemBusy(request Request) bool {
 	var conn *telnet.Conn
 
-	conn, err := telnet.Dial("tcp", curReq.MachineAddress+":23")
+	conn, err := telnet.Dial("tcp", request.Address+":23")
 	if err != nil {
 		return true
 	}

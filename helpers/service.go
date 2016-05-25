@@ -29,22 +29,22 @@ func RunService(submissionChannel <-chan Request, config Configuration) {
 
 		// We have to use a descending list otherwise our deletion gets in the way
 		for curIndex := len(requestList) - 1; curIndex >= 0; curIndex-- {
-			curReq := requestList[curIndex]
+			request := requestList[curIndex]
 			timeout := time.Duration(config.IndividualTimeout) * time.Millisecond
 
-			conn, err := net.DialTimeout("tcp", curReq.MachineAddress+":"+strconv.Itoa(curReq.Port), timeout)
+			conn, err := net.DialTimeout("tcp", request.Address+":"+strconv.Itoa(request.Port), timeout)
 			if err == nil { // Successfully connected
 				defer conn.Close()
 
-				if !IsSystemBusy(curReq) {
-					SendResponse(curReq, "Success")
+				if !IsSystemBusy(request) {
+					CallCallback(request, "Success")
 					requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
 					continue
 				}
 			}
 
-			if int(time.Since(curReq.SubmissionTime).Seconds()) > curReq.Timeout { // We've timed out
-				SendResponse(curReq, "Timeout")
+			if int(time.Since(request.SubmissionTime).Seconds()) > request.Timeout { // We've timed out
+				CallCallback(request, "Timeout")
 
 				requestList = append(requestList[:curIndex], requestList[curIndex+1:]...)
 				continue

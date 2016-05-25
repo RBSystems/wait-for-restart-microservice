@@ -9,7 +9,7 @@ type Configuration struct {
 }
 
 type Request struct {
-	MachineAddress  string    `json:"machineAddress"`  // Address to be tested for reboot
+	Address         string    `json:"Address"`         // Address to be tested for reboot
 	Port            int       `json:"port"`            // The port to be used when testing connection
 	Timeout         int       `json:"timeout"`         // Time in seconds to wait
 	CallbackAddress string    `json:"callbackAddress"` // Complete address to send the notification that the host is responding
