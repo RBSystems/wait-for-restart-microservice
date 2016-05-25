@@ -1,5 +1,7 @@
 # Wait for Reboot Microservice
 
+![Circle CI Build Status](https://circleci.com/gh/byuoitav/wait-for-reboot-microservice/tree/master.svg?style=shield)
+
 [![View in Swagger](http://www.jessemillar.com/view-in-swagger-button/button.svg)](https://byuoitav.github.io/swagger-ui/?url=https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.yml)
 
 A service designed to monitor the reboot status of Crestron devices (by testing a TCP connection) and notify the submitter via a POST when reboot is complete.
