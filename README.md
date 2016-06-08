@@ -1,6 +1,4 @@
-# Wait for Reboot Microservice
-
-![Circle CI Build Status](https://circleci.com/gh/byuoitav/wait-for-reboot-microservice/tree/master.svg?style=shield)
+# Wait for Reboot Microservice [![CircleCI](https://circleci.com/gh/byuoitav/wait-for-reboot-microservice.svg?style=svg)](https://circleci.com/gh/byuoitav/wait-for-reboot-microservice)
 
 [![View in Swagger](http://jessemillar.github.io/view-in-swagger-button/button.svg)](https://byuoitav.github.io/swagger-ui/?url=https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.yml)
 
@@ -10,7 +8,7 @@ The service monitors multiple targets concurrently, and will notify the address 
 
 The information for the pinging information can be found in the Config file, detailed below.
 
-### Config File
+## Config File
 When running the program you can pass in the `-config` flag denoting the location of the JSON config file. If no value is passed in it will default to the provided `./config.json`
 
 ```
