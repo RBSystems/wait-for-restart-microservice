@@ -13,4 +13,5 @@ deployment:
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - docker push byuoitav/wait-for-reboot-microservice:$CIRCLE_SHA1
-      - docker push byuoitav/wait-for-reboot-microservice:latest      
+      - docker push byuoitav/wait-for-reboot-microservice:latest
+      - ./deploy.sh $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1
