@@ -8,12 +8,12 @@ import (
 
 func MakeSubmissonHandler(submissionChannel chan<- Request) func(c echo.Context) error {
 	// If we want the handler to have access to the channel we have to build a wrapper around it
-	return func(c echo.Context) error {
+	return func(context echo.Context) error {
 		request := Request{}
-		c.Bind(&request)
+		context.Bind(&request)
 
 		if len(request.CallbackAddress) < 1 || len(request.Address) < 1 {
-			return c.JSON(http.StatusBadRequest, "Request must include at least Address and CallbackAddress tokens")
+			return context.JSON(http.StatusBadRequest, "Request must include at least Address and CallbackAddress tokens")
 		}
 
 		if request.Port == 0 {
@@ -26,6 +26,6 @@ func MakeSubmissonHandler(submissionChannel chan<- Request) func(c echo.Context)
 
 		submissionChannel <- request // Add the request body to the channel queue
 
-		return c.JSON(http.StatusOK, "Added to queue")
+		return context.JSON(http.StatusOK, "Added to queue")
 	}
 }
