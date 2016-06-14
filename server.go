@@ -37,15 +37,15 @@ func main() {
 	go helpers.RunService(submissionChannel, config)
 
 	port := ":8003"
-	e := echo.New()
-	e.Pre(middleware.RemoveTrailingSlash())
+	router := echo.New()
+	router.Pre(middleware.RemoveTrailingSlash())
 
-	e.Get("/", hateoas.RootResponse)
-	e.Get("/health", health.Check)
-	e.Get("/submit", controllers.SubmitInfo)
+	router.Get("/", hateoas.RootResponse)
+	router.Get("/health", health.Check)
+	router.Get("/submit", controllers.SubmitInfo)
 
-	e.Post("/submit", submitRequest)
+	router.Post("/submit", submitRequest)
 
 	fmt.Printf("The Wait for Reboot microservice is listening on %s\n", port)
-	e.Run(fasthttp.New(port))
+	router.Run(fasthttp.New(port))
 }
