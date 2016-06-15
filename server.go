@@ -9,7 +9,7 @@ import (
 	"github.com/byuoitav/wait-for-reboot-microservice/helpers"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/fasthttp"
+	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 )
 
@@ -47,5 +47,5 @@ func main() {
 	router.Post("/submit", submitRequest)
 
 	fmt.Printf("The Wait for Reboot microservice is listening on %s\n", port)
-	router.Run(fasthttp.New(port))
+	router.Run(standard.New(port))
 }
