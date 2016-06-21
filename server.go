@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"github.com/byuoitav/hateoas"
-	"github.com/byuoitav/wait-for-reboot-microservice/controllers"
-	"github.com/byuoitav/wait-for-reboot-microservice/helpers"
+	"github.com/byuoitav/wait-for-restart-microservice/controllers"
+	"github.com/byuoitav/wait-for-restart-microservice/helpers"
 	"github.com/byuoitav/wso2jwt"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.json")
+	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/swagger.json")
 	if err != nil {
 		log.Fatalln("Could not load Swagger file. Error: " + err.Error())
 	}
@@ -48,7 +48,7 @@ func main() {
 
 	router.Post("/submit", submitRequest, wso2jwt.ValidateJWT())
 
-	log.Println("The Wait for Reboot microservice is listening on " + port)
+	log.Println("The Wait for restart microservice is listening on " + port)
 	server := fasthttp.New(port)
 	server.ReadBufferSize = 1024 * 10 // Needed to interface properly with WSO2
 	router.Run(server)

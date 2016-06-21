@@ -1,12 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Wait for Reboot Microservice",
-        "description": "Waits for Crestron machines to reboot and reports back when they do",
+        "title": "Wait for Restart Microservice",
+        "description": "Waits for Crestron machines to restart and reports back when they do",
         "version": "0.1"
     },
     "host": "api.byu.edu:443",
-    "basePath": "/byuoitav-wait-for-reboot-microservice/0.1",
+    "basePath": "/byuoitav-wait-for-restart-microservice/0.1",
     "schemes": [
         "https"
     ],
@@ -153,7 +153,7 @@
             "properties": {
                 "Address": {
                     "type": "string",
-                    "description": "The address of the machine to be monitored for reboot"
+                    "description": "The address of the machine to be monitored for "
                 },
                 "Port": {
                     "type": "integer",
@@ -161,11 +161,11 @@
                 },
                 "CallbackAddress": {
                     "type": "string",
-                    "description": "The address to POST to upon reboot"
+                    "description": "The address to POST to upon restart"
                 },
                 "Identifier": {
                     "type": "string",
-                    "description": "A value passed to the callback address to identify the machine that has rebooted"
+                    "description": "A value passed to the callback address to identify the machine that has restarted"
                 },
                 "Timeout": {
                     "type": "integer",

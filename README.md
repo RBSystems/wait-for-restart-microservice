@@ -1,9 +1,9 @@
-# wait-for-reboot-microservice
-[![CircleCI](https://img.shields.io/circleci/project/byuoitav/wait-for-reboot-microservice.svg)](https://circleci.com/gh/byuoitav/wait-for-reboot-microservice) [![Codecov](https://img.shields.io/codecov/c/github/byuoitav/wait-for-reboot-microservice.svg)](https://codecov.io/gh/byuoitav/wait-for-reboot-microservice) [![Apache 2 License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/LICENSE)
+# wait-for-restart-microservice
+[![CircleCI](https://img.shields.io/circleci/project/byuoitav/wait-for-restart-microservice.svg)](https://circleci.com/gh/byuoitav/wait-for-restart-microservice) [![Codecov](https://img.shields.io/codecov/c/github/byuoitav/wait-for-restart-microservice.svg)](https://codecov.io/gh/byuoitav/wait-for-restart-microservice) [![Apache 2 License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/LICENSE)
 
-[![View in Swagger](http://jessemillar.github.io/view-in-swagger-button/button.svg)](https://byuoitav.github.io/swagger-ui/?url=https://raw.githubusercontent.com/byuoitav/wait-for-reboot-microservice/master/swagger.json)
+[![View in Swagger](http://jessemillar.github.io/view-in-swagger-button/button.svg)](https://byuoitav.github.io/swagger-ui/?url=https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/swagger.json)
 
-A service designed to monitor the reboot status of Crestron devices (by testing a TCP connection) and notify the submitter via a POST when reboot is complete.
+A service designed to monitor the restart status of Crestron devices (by testing a TCP connection) and notify the submitter via a POST when restart is complete.
 
 The service monitors multiple targets concurrently, and will notify the address defined in the submission request when they respond successfully to TCP requests.
 

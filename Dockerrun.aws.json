@@ -5,7 +5,7 @@
         "Key": ".dockercfg"
     },
     "Image": {
-        "Name": "byuoitav/wait-for-reboot-microservice:latest",
+        "Name": "byuoitav/wait-for-restart-microservice:latest",
         "Update": "true"
     },
     "Ports": [{
