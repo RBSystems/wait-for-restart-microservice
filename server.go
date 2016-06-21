@@ -48,7 +48,7 @@ func main() {
 
 	router.Post("/submit", submitRequest, wso2jwt.ValidateJWT())
 
-	log.Println("The Wait for restart microservice is listening on " + port)
+	log.Println("The Wait for Restart microservice is listening on " + port)
 	server := fasthttp.New(port)
 	server.ReadBufferSize = 1024 * 10 // Needed to interface properly with WSO2
 	router.Run(server)
