@@ -23,7 +23,7 @@
 			"vcs": "git",
 			"revision": "ba14da1f827188454a4591717fff29999010887f",
 			"branch": "master",
-			"path": "binutil",
+			"path": "/binutil",
 			"notests": true
 		},
 		{
@@ -32,7 +32,23 @@
 			"vcs": "git",
 			"revision": "ba14da1f827188454a4591717fff29999010887f",
 			"branch": "master",
-			"path": "/coff",
+			"path": "coff",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/alecthomas/template",
+			"repository": "https://github.com/alecthomas/template",
+			"vcs": "git",
+			"revision": "a0175ee3bccc567396460bf5acd36800cb10c49c",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/alecthomas/units",
+			"repository": "https://github.com/alecthomas/units",
+			"vcs": "git",
+			"revision": "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a",
+			"branch": "master",
 			"notests": true
 		},
 		{
@@ -57,48 +73,6 @@
 			"repository": "https://github.com/dgrijalva/jwt-go",
 			"vcs": "git",
 			"revision": "9ed569b5d1ac936e6494082958d63a6aa4fff99a",
-			"branch": "master",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/facebookgo/clock",
-			"repository": "https://github.com/facebookgo/clock",
-			"vcs": "git",
-			"revision": "600d898af40aa09a7a93ecb9265d87b0504b6f03",
-			"branch": "master",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/facebookgo/grace/gracehttp",
-			"repository": "https://github.com/facebookgo/grace",
-			"vcs": "git",
-			"revision": "5729e484473f52048578af1b80d0008c7024089b",
-			"branch": "master",
-			"path": "/gracehttp",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/facebookgo/grace/gracenet",
-			"repository": "https://github.com/facebookgo/grace",
-			"vcs": "git",
-			"revision": "5729e484473f52048578af1b80d0008c7024089b",
-			"branch": "master",
-			"path": "gracenet",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/facebookgo/httpdown",
-			"repository": "https://github.com/facebookgo/httpdown",
-			"vcs": "git",
-			"revision": "a3b1354551a26449fbe05f5d855937f6e7acbd71",
-			"branch": "master",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/facebookgo/stats",
-			"repository": "https://github.com/facebookgo/stats",
-			"vcs": "git",
-			"revision": "1b76add642e42c6ffba7211ad7b3939ce654526e",
 			"branch": "master",
 			"notests": true
 		},
@@ -129,6 +103,22 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/jessemillar/health",
+			"repository": "https://github.com/jessemillar/health",
+			"vcs": "git",
+			"revision": "f5140c4f83d54deeb5d0d21fa55ae9b7b1a1f663",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/jessemillar/jsonresp",
+			"repository": "https://github.com/jessemillar/jsonresp",
+			"vcs": "git",
+			"revision": "f6268670ca1a1b59f4e6503eb55e273576877eaf",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/jessevdk/go-flags",
 			"repository": "https://github.com/jessevdk/go-flags",
 			"vcs": "git",
@@ -145,53 +135,10 @@
 			"notests": true
 		},
 		{
-			"importpath": "github.com/klauspost/compress/flate",
-			"repository": "https://github.com/klauspost/compress",
-			"vcs": "git",
-			"revision": "e3b7981a12dd3cab49afa1d3a50e715846f23732",
-			"branch": "master",
-			"path": "flate",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/klauspost/compress/gzip",
-			"repository": "https://github.com/klauspost/compress",
-			"vcs": "git",
-			"revision": "e3b7981a12dd3cab49afa1d3a50e715846f23732",
-			"branch": "master",
-			"path": "/gzip",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/klauspost/compress/zlib",
-			"repository": "https://github.com/klauspost/compress",
-			"vcs": "git",
-			"revision": "e3b7981a12dd3cab49afa1d3a50e715846f23732",
-			"branch": "master",
-			"path": "zlib",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/klauspost/cpuid",
-			"repository": "https://github.com/klauspost/cpuid",
-			"vcs": "git",
-			"revision": "09cded8978dc9e80714c4d85b0322337b0a1e5e0",
-			"branch": "master",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/klauspost/crc32",
-			"repository": "https://github.com/klauspost/crc32",
-			"vcs": "git",
-			"revision": "cb6bfca970f6908083f26f39a79009d608efd5cd",
-			"branch": "master",
-			"notests": true
-		},
-		{
 			"importpath": "github.com/labstack/echo",
 			"repository": "https://github.com/labstack/echo",
 			"vcs": "git",
-			"revision": "e08070379af60f5b9c0fb5bb2d1527ba9624fe43",
+			"revision": "f9e97332f3bebd2c26753f7dc679588a22cb387d",
 			"branch": "HEAD",
 			"notests": true
 		},
@@ -201,7 +148,7 @@
 			"vcs": "git",
 			"revision": "9a43ff0d261e0e65594422e9eee08cf301aabbe7",
 			"branch": "master",
-			"path": "bytes",
+			"path": "/bytes",
 			"notests": true
 		},
 		{
@@ -210,7 +157,7 @@
 			"vcs": "git",
 			"revision": "9a43ff0d261e0e65594422e9eee08cf301aabbe7",
 			"branch": "master",
-			"path": "/color",
+			"path": "color",
 			"notests": true
 		},
 		{
@@ -243,35 +190,16 @@
 			"importpath": "github.com/mattn/go-isatty",
 			"repository": "https://github.com/mattn/go-isatty",
 			"vcs": "git",
-			"revision": "66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8",
+			"revision": "30a891c33c7cde7b02a981314b4228ec99380cca",
 			"branch": "master",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/stretchr/testify/assert",
-			"repository": "https://github.com/stretchr/testify",
+			"importpath": "github.com/rsc/letsencrypt",
+			"repository": "https://github.com/rsc/letsencrypt",
 			"vcs": "git",
-			"revision": "18a02ba4a312f95da08ff4cfc0055750ce50ae9e",
+			"revision": "76104d26167d38b6a0010f42bfc8ec5487742e8b",
 			"branch": "master",
-			"path": "/assert",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
-			"repository": "https://github.com/stretchr/testify",
-			"vcs": "git",
-			"revision": "18a02ba4a312f95da08ff4cfc0055750ce50ae9e",
-			"branch": "master",
-			"path": "vendor/github.com/davecgh/go-spew/spew",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
-			"repository": "https://github.com/stretchr/testify",
-			"vcs": "git",
-			"revision": "18a02ba4a312f95da08ff4cfc0055750ce50ae9e",
-			"branch": "master",
-			"path": "vendor/github.com/pmezard/go-difflib/difflib",
 			"notests": true
 		},
 		{
@@ -291,22 +219,6 @@
 			"notests": true
 		},
 		{
-			"importpath": "github.com/valyala/bytebufferpool",
-			"repository": "https://github.com/valyala/bytebufferpool",
-			"vcs": "git",
-			"revision": "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7",
-			"branch": "master",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/valyala/fasthttp",
-			"repository": "https://github.com/valyala/fasthttp",
-			"vcs": "git",
-			"revision": "1913bdea45d5d9515c6b9433683bfc8950402389",
-			"branch": "master",
-			"notests": true
-		},
-		{
 			"importpath": "github.com/valyala/fasttemplate",
 			"repository": "https://github.com/valyala/fasttemplate",
 			"vcs": "git",
@@ -315,11 +227,12 @@
 			"notests": true
 		},
 		{
-			"importpath": "github.com/valyala/tcplisten",
-			"repository": "https://github.com/valyala/tcplisten",
+			"importpath": "golang.org/x/crypto/ocsp",
+			"repository": "https://go.googlesource.com/crypto",
 			"vcs": "git",
-			"revision": "ceec8f93295a060cdb565ec25e4ccf17941dbd55",
+			"revision": "ede567c8e044a5913dad1d1af3696d9da953104c",
 			"branch": "master",
+			"path": "/ocsp",
 			"notests": true
 		},
 		{
@@ -344,9 +257,18 @@
 			"importpath": "golang.org/x/sys/unix",
 			"repository": "https://go.googlesource.com/sys",
 			"vcs": "git",
-			"revision": "b699b7032584f0953262cb2788a0ca19bb494703",
+			"revision": "30237cf4eefd639b184d1f2cb77a581ea0be8947",
 			"branch": "master",
 			"path": "/unix",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/time/rate",
+			"repository": "https://go.googlesource.com/time",
+			"vcs": "git",
+			"revision": "f51c12702a4d776e4c1fa9b0fabab841babae631",
+			"branch": "master",
+			"path": "/rate",
 			"notests": true
 		},
 		{
@@ -354,6 +276,22 @@
 			"repository": "https://github.com/golang/appengine",
 			"vcs": "git",
 			"revision": "ca59ef35f409df61fa4a5f8290ff289b37eccfb8",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/alecthomas/kingpin.v2",
+			"repository": "https://gopkg.in/alecthomas/kingpin.v2",
+			"vcs": "git",
+			"revision": "e9044be3ab2a8e11d4e1f418d12f0790d57e8d70",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/square/go-jose.v1",
+			"repository": "https://gopkg.in/square/go-jose.v1",
+			"vcs": "git",
+			"revision": "aa2e30fdd1fe9dd3394119af66451ae790d50e0d",
 			"branch": "master",
 			"notests": true
 		},

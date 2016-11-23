@@ -4,14 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/byuoitav/hateoas"
-	"github.com/byuoitav/wait-for-restart-microservice/controllers"
+	"github.com/byuoitav/wait-for-restart-microservice/handlers"
 	"github.com/byuoitav/wait-for-restart-microservice/helpers"
 	"github.com/byuoitav/wso2jwt"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
 )
 
@@ -40,16 +40,22 @@ func main() {
 	port := ":8003"
 	router := echo.New()
 	router.Pre(middleware.RemoveTrailingSlash())
+	router.Use(middleware.CORS())
 
-	router.Get("/", hateoas.RootResponse)
-	router.Get("/health", health.Check)
+	// Use the `secure` routing group to require authentication
+	secure := router.Group("", echo.WrapMiddleware(wso2jwt.ValidateJWT))
 
-	router.Get("/submit", controllers.SubmitInfo, wso2jwt.ValidateJWT())
+	router.GET("/", echo.WrapHandler(http.HandlerFunc(hateoas.RootResponse)))
+	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
 
-	router.Post("/submit", submitRequest, wso2jwt.ValidateJWT())
+	secure.GET("/submit", handlers.SubmitInfo)
 
-	log.Println("The Wait for Restart microservice is listening on " + port)
-	server := fasthttp.New(port)
-	server.ReadBufferSize = 1024 * 10 // Needed to interface properly with WSO2
-	router.Run(server)
+	secure.POST("/submit", submitRequest)
+
+	server := http.Server{
+		Addr:           port,
+		MaxHeaderBytes: 1024 * 10,
+	}
+
+	router.StartServer(&server)
 }
