@@ -1,5 +1,5 @@
 # wait-for-restart-microservice
-[![CircleCI](https://img.shields.io/circleci/project/byuoitav/wait-for-restart-microservice.svg)](https://circleci.com/gh/byuoitav/wait-for-restart-microservice) [![Codecov](https://img.shields.io/codecov/c/github/byuoitav/wait-for-restart-microservice.svg)](https://codecov.io/gh/byuoitav/wait-for-restart-microservice) [![Apache 2 License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/LICENSE)
+[![CircleCI](https://img.shields.io/circleci/project/byuoitav/wait-for-restart-microservice.svg)](https://circleci.com/gh/byuoitav/wait-for-restart-microservice) [![Apache 2 License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/LICENSE)
 
 [![View in Swagger](http://jessemillar.github.io/view-in-swagger-button/button.svg)](https://byuoitav.github.io/swagger-ui/?url=https://raw.githubusercontent.com/byuoitav/wait-for-restart-microservice/master/swagger.json)
 
