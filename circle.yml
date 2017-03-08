@@ -1,19 +1,22 @@
 machine:
-  services:
-    - docker
+    services:
+        - docker
+
+dependencies:
+    post:
+        - rm -r ~/.gradle || true
 
 test:
-  post:
-    - ./coverage.sh
-    - bash <(curl -s https://codecov.io/bash)
+    override:
+        - go test -v -race $(go list ./... | grep -v /vendor/)
 
 deployment:
-  production:
-    branch: master
-    commands:
-      - docker build -t byuoitav/wait-for-restart-microservice:$CIRCLE_SHA1 .
-      - docker build -t byuoitav/wait-for-restart-microservice:latest .
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - docker push byuoitav/wait-for-restart-microservice:$CIRCLE_SHA1
-      - docker push byuoitav/wait-for-restart-microservice:latest
-      - ./deploy.sh $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1
+    production:
+        branch: master
+        commands:
+            - docker build -t byuoitav/wait-for-restart-microservice:$CIRCLE_SHA1 .
+            - docker build -t byuoitav/wait-for-restart-microservice:latest .
+            - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            - docker push byuoitav/wait-for-restart-microservice:$CIRCLE_SHA1
+            - docker push byuoitav/wait-for-restart-microservice:latest
+            - ./deploy.sh $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1
